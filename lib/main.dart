@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart' as su;
+//import 'package:common_utils/common_utils.dart';
+import 'package:flustars/flustars.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,103 +12,225 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  String dateTime = "";
+ TimerUtil timer;
+
+  @override
+  void initState() {
+    super.initState();
+    timer = TimerUtil();
+    timer.setInterval(1000);
+    timer.setOnTimerTickCallback((i) {
+      setState(() {
+        this.dateTime =DateUtil.formatDate(DateTime.now(), format: DataFormats.zh_y_mo_d_h_m); 
+      });
     });
+    if(timer != null) {
+      timer.startTimer();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    su.ScreenUtil.instance = su.ScreenUtil(width: 1920, height: 1200)..init(context);
+    double cH = su.ScreenUtil.getInstance().setHeight(1200 * 0.6);
+    double cW = MediaQuery.of(context).size.width - 60;
+    double itemW = cW / 4 - 50;
+    double hTop = cH * 0.6;
+    double hBottom = cH * 0.3;
+
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: <Color>[
+                  Color.fromRGBO(84, 120, 208, 1),
+                  //Color.fromRGBO(113, 134, 199, 1),
+                  Color.fromRGBO(131, 135, 183, 1),
+                  Color.fromRGBO(65, 29, 90, 1),
+                  //Color.fromRGBO(92, 57, 113, 1),
+                  //Color.fromRGBO(32, 14, 76, 1),
+                ])),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    child: Align(
+                      child: Text(dateTime, style: TextStyle(fontSize: su.ScreenUtil.instance.setSp(74), fontWeight: FontWeight.normal, color: Colors.white),),
+                      alignment: Alignment(0.9, 0),
+                    ),
+                  ),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(width: 1.0, color: Colors.white),
+                      color: Color.fromRGBO(255, 255, 255, 0.1)),
+                  width: cW,
+                  height: su.ScreenUtil.getInstance().setHeight(1200 * 0.6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/images/smile.png",
+                            height: hTop,
+                            width: itemW,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          Container(
+                            //decoration: BoxDecoration(border:Border.all(width: 1.0), color: Colors.white),
+                            height: hBottom,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 1),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Text(
+                                    "满意",
+                                    style: TextStyle(
+                                        fontSize:
+                                            su.ScreenUtil.getInstance().setSp(68),
+                                        color:
+                                            Color.fromRGBO(255, 244, 118, 1)),
+                                  ),
+                                  Text(
+                                    "300",
+                                    style: TextStyle(
+                                        fontSize:
+                                            su.ScreenUtil.getInstance().setSp(57),
+                                        color:
+                                            Color.fromRGBO(255, 244, 118, 1)),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/images/normal.png",
+                            height: hTop,
+                            width: itemW - 12,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          Container(
+                            //decoration: BoxDecoration(border:Border.all(width: 1.0), color: Colors.white),
+                            height: hBottom,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 1),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Text(
+                                    "一般",
+                                    style: TextStyle(
+                                        fontSize:
+                                            su.ScreenUtil.getInstance().setSp(68),
+                                        color: Color.fromRGBO(255, 106, 6, 1)),
+                                  ),
+                                  Text(
+                                    "10",
+                                    style: TextStyle(
+                                        fontSize:
+                                            su.ScreenUtil.getInstance().setSp(57),
+                                        color: Color.fromRGBO(255, 106, 6, 1)),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset(
+                            "assets/images/sad.png",
+                            height: hTop,
+                            width: itemW,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          Container(
+                            //decoration: BoxDecoration(border:Border.all(width: 1.0), color: Colors.white),
+                            height: hBottom,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 1),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Text(
+                                    "不满意",
+                                    style: TextStyle(
+                                        fontSize:
+                                            su.ScreenUtil.getInstance().setSp(68),
+                                        color: Color.fromRGBO(255, 50, 50, 1)),
+                                  ),
+                                  Text(
+                                    "10",
+                                    style: TextStyle(
+                                        fontSize:
+                                            su.ScreenUtil.getInstance().setSp(57),
+                                        color: Color.fromRGBO(255, 50, 50, 1)),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Image.asset("assets/images/wc.png"),
+                      )
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: Text(""),
+                  ),
+                )
+              ],
+            )));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    if(timer != null) {
+      timer.cancel();
+    }
   }
 }
