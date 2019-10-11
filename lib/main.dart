@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart' as su;
 import 'package:flustars/flustars.dart';
+import 'package:sywlwcapp/component/itemWidget.dart';
 
 void main() async {
   await SpUtil.getInstance();
+  SystemChrome.setEnabledSystemUIOverlays([]);
+  SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
   runApp(MyApp());
 }
 
@@ -83,8 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
     double cH = su.ScreenUtil.getInstance().setHeight(1200 * 0.6);
     double cW = MediaQuery.of(context).size.width - 60;
     double itemW = cW / 4 - 50;
-    double hTop = cH * 0.6;
-    double hBottom = cH * 0.3;
 
     return Scaffold(
         body: Container(
@@ -126,146 +128,38 @@ class _MyHomePageState extends State<MyHomePage> {
                       border: Border.all(width: 1.0, color: Colors.white),
                       color: Color.fromRGBO(255, 255, 255, 0.1)),
                   width: cW,
-                  height: su.ScreenUtil.getInstance().setHeight(1200 * 0.6),
+                  height: cH,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: addSmileNum,
-                            child: Image.asset(
-                              "assets/images/smile.png",
-                              alignment: Alignment.bottomCenter,
-                              height: hTop,
-                              width: itemW,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                          Container(
-                            //decoration: BoxDecoration(border:Border.all(width: 1.0), color: Colors.white),
-                            height: hBottom,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 1),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Text(
-                                    "满意",
-                                    style: TextStyle(
-                                        fontSize: su.ScreenUtil.getInstance()
-                                            .setSp(68),
-                                        color:
-                                            Color.fromRGBO(255, 244, 118, 1)),
-                                  ),
-                                  Text(
-                                    smileNum.toString(),
-                                    style: TextStyle(
-                                        fontSize: su.ScreenUtil.getInstance()
-                                            .setSp(57),
-                                        color:
-                                            Color.fromRGBO(255, 244, 118, 1)),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      ItemWidget(
+                        title: '满意',
+                        height: (cH - 2) / 1.2,
+                        width: itemW,
+                        image: 'assets/images/smile.png',
+                        num: smileNum,
+                        onClick: addSmileNum,
+                        color: Color.fromRGBO(255, 244, 118, 1),
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: addNormalNum,
-                            child: Image.asset(
-                              "assets/images/normal.png",
-                              height: hTop,
-                              width: itemW - 18,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                          Container(
-                            //decoration: BoxDecoration(border:Border.all(width: 1.0), color: Colors.white),
-                            height: hBottom,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 1),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Text(
-                                    "一般",
-                                    style: TextStyle(
-                                        fontSize: su.ScreenUtil.getInstance()
-                                            .setSp(68),
-                                        color:
-                                            Color.fromRGBO(255, 106, 6, 1)),
-                                  ),
-                                  Text(
-                                    normalNum.toString(),
-                                    style: TextStyle(
-                                        fontSize: su.ScreenUtil.getInstance()
-                                            .setSp(57),
-                                        color:
-                                            Color.fromRGBO(255, 106, 6, 1)),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      ItemWidget(
+                        title: '一般',
+                        height: (cH - 2) / 1.2,
+                        width: itemW,
+                        image: 'assets/images/normal.png',
+                        num: normalNum,
+                        onClick: addNormalNum,
+                        color: Color.fromRGBO(255, 106, 6, 1),
+                        imageWidth: itemW-20
                       ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: addSadNum,
-                            child: Image.asset(
-                              "assets/images/sad.png",
-                              alignment: Alignment.bottomCenter,
-                              height: hTop,
-                              width: itemW-18,
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                          Container(
-                            //decoration: BoxDecoration(border:Border.all(width: 1.0), color: Colors.white),
-                            height: hBottom,
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 1),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Text(
-                                    "不满意",
-                                    style: TextStyle(
-                                        fontSize: su.ScreenUtil.getInstance()
-                                            .setSp(68),
-                                        color:
-                                            Color.fromRGBO(255, 50, 50, 1)),
-                                  ),
-                                  Text(
-                                    sadNum.toString(),
-                                    style: TextStyle(
-                                        fontSize: su.ScreenUtil.getInstance()
-                                            .setSp(57),
-                                        color:
-                                            Color.fromRGBO(255, 50, 50, 1)),
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      ItemWidget(
+                        title: '不满意',
+                        height: (cH - 2) / 1.2,
+                        width: itemW,
+                        image: 'assets/images/sad.png',
+                        num: sadNum,
+                        onClick: addSadNum,
+                        color: Color.fromRGBO(255, 50, 50, 1),
+                        imageWidth: itemW-20
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
